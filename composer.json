@@ -1,0 +1,69 @@
+{
+    "name": "aristidesneto/multitenancy",
+    "description": "",
+    "keywords": [
+        "aristides",
+        "multitenancy"
+    ],
+    "homepage": "https://github.com/aristidesneto/multitenancy",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Arisides Neto",
+            "email": "aristidesbneto@gmail.com",
+            "homepage": "https://aristides.dev",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/contracts": "^8.0"
+    },
+    "require-dev": {
+        "laravel/breeze": "^1.0",
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aristides\\Multitenancy\\": "src",
+            "Aristides\\Multitenancy\\Database\\Factories\\": "database/factories"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aristides\\Multitenancy\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "psalm": "vendor/bin/psalm",
+        "test": "vendor/bin/phpunit --colors=always",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Aristides\\Multitenancy\\MultitenancyServiceProvider",
+                "Aristides\\Multitenancy\\RouteMasterServiceProvider"
+            ],
+            "aliases": {
+                "Multitenancy": "Aristides\\Multitenancy\\MultitenancyFacade"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/spatie"
+        },
+        {
+            "type": "other",
+            "url": "https://spatie.be/open-source/support-us"
+        }
+    ]
+}
