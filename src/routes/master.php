@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Aristides\Multitenancy\Http\Controllers\TenantController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [TenantController::class, 'index'])->name('tenant.index');
 Route::post('store', [TenantController::class, 'store'])->name('tenant.store');

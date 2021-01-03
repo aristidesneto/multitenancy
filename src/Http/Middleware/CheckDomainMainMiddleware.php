@@ -2,9 +2,9 @@
 
 namespace Aristides\Multitenancy\Http\Middleware;
 
+use Aristides\Multitenancy\Tenant\TenantManager;
 use Closure;
 use Illuminate\Http\Request;
-use Aristides\Multitenancy\Tenant\TenantManager;
 
 class CheckDomainMainMiddleware
 {
@@ -17,7 +17,7 @@ class CheckDomainMainMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!(new TenantManager())->isDomainMain()) {
+        if (! (new TenantManager())->isDomainMain()) {
             abort(401);
         }
 

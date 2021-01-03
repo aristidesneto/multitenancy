@@ -2,12 +2,12 @@
 
 namespace Aristides\Multitenancy\Http\Controllers;
 
-use Ramsey\Uuid\Uuid;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Artisan;
 use Aristides\Multitenancy\Models\Tenant;
 use Aristides\Multitenancy\Tenant\TenantManager;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Ramsey\Uuid\Uuid;
 
 class TenantController extends Controller
 {
@@ -16,7 +16,7 @@ class TenantController extends Controller
         $tenants = Tenant::get();
 
         return view('tenants', [
-            'tenants' => $tenants
+            'tenants' => $tenants,
         ]);
     }
 

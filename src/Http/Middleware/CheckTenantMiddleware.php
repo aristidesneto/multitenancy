@@ -2,9 +2,9 @@
 
 namespace Aristides\Multitenancy\Http\Middleware;
 
+use Aristides\Multitenancy\Tenant\TenantManager;
 use Closure;
 use Illuminate\Http\Request;
-use Aristides\Multitenancy\Tenant\TenantManager;
 
 class CheckTenantMiddleware
 {
@@ -17,7 +17,7 @@ class CheckTenantMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!(new TenantManager())->isTenant()) {
+        if (! (new TenantManager())->isTenant()) {
             abort(401);
         }
 

@@ -2,10 +2,10 @@
 
 namespace Aristides\Multitenancy\Http\Middleware;
 
-use Closure;
-use Illuminate\Http\Request;
 use Aristides\Multitenancy\Models\Tenant;
 use Aristides\Multitenancy\Tenant\TenantManager;
+use Closure;
+use Illuminate\Http\Request;
 
 class TenantMiddleware
 {
@@ -25,16 +25,17 @@ class TenantMiddleware
         if ($isDomainMain) {
             $this->setSessionTenant([
                 'name' => 'Master',
-                'uuid' => null
+                'uuid' => null,
             ]);
+
             return $next($request);
         }
 
         $tenant = $this->getTenant($request->getHost());
 
-        if (!$tenant) {
+        if (! $tenant) {
             abort(404);
-        } else if(!$isDomainMain) {
+        } elseif (! $isDomainMain) {
             $manager->setConnection($tenant);
 
             $this->setSessionTenant($tenant->only([

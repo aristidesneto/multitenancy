@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Aristides\Multitenancy\Tenant;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 use Aristides\Multitenancy\Models\Tenant;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class TenantManager
 {
@@ -31,7 +31,7 @@ class TenantManager
 
     public function isTenant() : bool
     {
-        return !$this->checkDomain();
+        return ! $this->checkDomain();
     }
 
     private function checkDomain()

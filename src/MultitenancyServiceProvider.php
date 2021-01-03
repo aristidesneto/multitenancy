@@ -2,8 +2,8 @@
 
 namespace Aristides\Multitenancy;
 
-use Illuminate\Support\ServiceProvider;
 use Aristides\Multitenancy\Commands\TenantMigrationsCommand;
+use Illuminate\Support\ServiceProvider;
 
 class MultitenancyServiceProvider extends ServiceProvider
 {
@@ -28,7 +28,6 @@ class MultitenancyServiceProvider extends ServiceProvider
             $this->commands([
                 TenantMigrationsCommand::class,
             ]);
-
         }
 
         $this->loadRoutesFrom(__DIR__. '/routes/master.php');

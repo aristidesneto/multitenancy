@@ -10,6 +10,6 @@ class Tenant extends Model
     use HasFactory;
 
     protected $fillable = [
-        'uuid', 'name', 'domain', 'db_host', 'db_name', 'db_user', 'db_pass'
+        'uuid', 'name', 'domain', 'db_host', 'db_name', 'db_user', 'db_pass',
     ];
 }

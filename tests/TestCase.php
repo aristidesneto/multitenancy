@@ -2,9 +2,9 @@
 
 namespace Aristides\Multitenancy\Tests;
 
+use Aristides\Multitenancy\MultitenancyServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Aristides\Multitenancy\MultitenancyServiceProvider;
 
 class TestCase extends Orchestra
 {

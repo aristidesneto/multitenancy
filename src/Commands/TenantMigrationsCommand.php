@@ -2,10 +2,10 @@
 
 namespace Aristides\Multitenancy\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 use Aristides\Multitenancy\Models\Tenant;
 use Aristides\Multitenancy\Tenant\TenantManager;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 
 class TenantMigrationsCommand extends Command
 {
@@ -81,7 +81,7 @@ class TenantMigrationsCommand extends Command
         $this->warn("Migration {$tenant->name} successfully");
 
 
-        if ((!$tenant->migrated && $run === 0) || $this->option('seed')) {
+        if ((! $tenant->migrated && $run === 0) || $this->option('seed')) {
             $this->execSeedCommand($tenant->name);
         }
 
@@ -98,4 +98,3 @@ class TenantMigrationsCommand extends Command
         $this->warn("Seed {$name} successfully");
     }
 }
-
