@@ -36,7 +36,7 @@ class TenantManager
 
     private function checkDomain()
     {
-        return request()->getHost() === config('tenant.domain_main');
+        return request()->getHost() === config('multitenancy.domain_main');
     }
 
     public function setDefaultConnection() : void
