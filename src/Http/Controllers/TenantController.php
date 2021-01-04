@@ -2,15 +2,20 @@
 
 namespace Aristides\Multitenancy\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Aristides\Multitenancy\Models\Tenant;
-use Aristides\Multitenancy\Tenant\TenantManager;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
-use Ramsey\Uuid\Uuid;
+use Aristides\Multitenancy\Models\Tenant;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Aristides\Multitenancy\Tenant\TenantManager;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class TenantController extends Controller
+class TenantController extends BaseCOntroller
 {
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
     public function index()
     {
         $tenants = Tenant::get();

@@ -16,7 +16,7 @@ class CreateTenantsTable extends Migration
             $table->string('db_name')->unique();
             $table->string('db_host');
             $table->string('db_user');
-            $table->string('db_pass');
+            $table->string('db_pass')->nullable();
             $table->boolean('migrated')->default(0);
             $table->timestamps();
         });

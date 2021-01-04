@@ -4,8 +4,6 @@ namespace Aristides\Multitenancy\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
-use Aristides\Multitenancy\Providers\RouteMasterServiceProvider;
 use Aristides\Multitenancy\Tenant\TenantManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +33,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         if ((new TenantManager())->isDomainMain()) {
-            return redirect(RouteMasterServiceProvider::HOME);
+            return redirect('/admin');
         }
 
         return redirect(RouteServiceProvider::HOME);
