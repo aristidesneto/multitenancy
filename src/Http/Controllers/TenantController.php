@@ -2,19 +2,21 @@
 
 namespace Aristides\Multitenancy\Http\Controllers;
 
-use Ramsey\Uuid\Uuid;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Aristides\Multitenancy\Models\Tenant;
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use Aristides\Multitenancy\Tenant\TenantManager;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Artisan;
+use Ramsey\Uuid\Uuid;
 
 class TenantController extends BaseCOntroller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
 
     public function index()
     {
