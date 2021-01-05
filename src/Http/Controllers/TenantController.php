@@ -22,9 +22,11 @@ class TenantController extends BaseCOntroller
     public function index()
     {
         $tenants = Tenant::get();
+        $domain = explode(".", config('multitenancy.domain_main'), 2);
 
         return view('multitenancy::dashboard', [
             'tenants' => $tenants,
+            'domain' => ".$domain[1]"
         ]);
     }
 
@@ -35,7 +37,9 @@ class TenantController extends BaseCOntroller
 
         $tenant = Tenant::create($data);
 
-        event(new TenantCreate($tenant));
+        if ($request->create_database) {
+            event(new TenantCreate($tenant));
+        }
 
         return redirect()->route('tenant.index');
     }

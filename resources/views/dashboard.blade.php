@@ -35,7 +35,7 @@
                             <div class="mb-3 row">
                                 <div class="input-group mb-3">
                                     <input type="text" name="domain" class="form-control" placeholder="Informe o subdomínio" aria-label="Informe o subdomínio" aria-describedby="basic-addon2">
-                                    <span class="input-group-text" id="basic-addon2">.tenancy.test</span>
+                                    <span class="input-group-text" id="basic-addon2">{{ $domain }}</span>
                                 </div>
                             </div>
 
@@ -76,7 +76,7 @@
 
                             <div class="mb-3 row">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" checked id="flexCheckDefault">
+                                    <input class="form-check-input" name="create_database" type="checkbox" value="1" checked id="flexCheckDefault">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Criar o banco de dados e executar migrations
                                     </label>

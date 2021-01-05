@@ -2,7 +2,8 @@
 
 namespace Aristides\Multitenancy\Tests;
 
-use Aristides\Multitenancy\MultitenancyServiceProvider;
+use Aristides\Multitenancy\Providers\EventServiceProvider;
+use Aristides\Multitenancy\Providers\MultitenancyServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -21,6 +22,7 @@ class TestCase extends Orchestra
     {
         return [
             MultitenancyServiceProvider::class,
+            EventServiceProvider::class,
         ];
     }
 
