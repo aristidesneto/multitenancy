@@ -63,15 +63,11 @@ class TenantMigrationsCommand extends Command
 
     private function execCommand(Tenant $tenant)
     {
-        $command = 'migrate';
-
         $this->tenant->setConnection($tenant);
 
         $this->info("Connecting tenant {$tenant->name}");
 
-        if ($this->option('fresh')) {
-            $command = 'migrate:fresh';
-        }
+        $command = $this->option('fresh') ? 'migrate:fresh' : 'migrate';
 
         $run = Artisan::call($command, [
             '--force' => true,

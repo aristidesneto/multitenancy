@@ -4,7 +4,6 @@ namespace Aristides\Multitenancy;
 
 use Aristides\Multitenancy\Commands\TenantMigrationsCommand;
 use Illuminate\Support\ServiceProvider;
-
 class MultitenancyServiceProvider extends ServiceProvider
 {
     public function boot()
@@ -14,9 +13,7 @@ class MultitenancyServiceProvider extends ServiceProvider
                 __DIR__ . '/../config/multitenancy.php' => config_path('multitenancy.php'),
             ], 'multitenancy-config');
 
-            $this->publishes([
-                __DIR__ . '/../resources/views' => base_path('resources/views/vendor/multitenancy'),
-            ], 'multitenancy-views');
+
 
             $migrationFileName = 'create_tenants_table.php';
             if (! $this->migrationFileExists($migrationFileName)) {
@@ -32,9 +29,20 @@ class MultitenancyServiceProvider extends ServiceProvider
                 ], 'multitenancy-tenants-migrations');
             }
 
+            // Seeder
             $this->publishes([
                 __DIR__ . "/../database/seeder/TenantSeeder.php.stub" => database_path('seeders/TenantSeeder.php'),
             ], 'multitenancy-seeder');
+
+            // Assets
+            $this->publishes([
+                __DIR__ . "/../resources/assets" => public_path('vendor/multitenancy'),
+            ], 'multitenancy-assets');
+
+            // Views
+            $this->publishes([
+                __DIR__ . '/../resources/views' => base_path('resources/views/vendor/multitenancy'),
+            ], 'multitenancy-views');
 
             $this->commands([
                 TenantMigrationsCommand::class,

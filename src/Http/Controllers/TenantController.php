@@ -22,7 +22,7 @@ class TenantController extends BaseCOntroller
     {
         $tenants = Tenant::get();
 
-        return view('tenants', [
+        return view('multitenancy::dashboard', [
             'tenants' => $tenants,
         ]);
     }
@@ -47,16 +47,17 @@ class TenantController extends BaseCOntroller
         return redirect()->route('tenant.index');
     }
 
-    public function migrationByUuid(string $uuid)
+    public function migrationByUuid(string $uuid, string $action = null)
     {
         $tenant = Tenant::where('uuid', $uuid)->first();
 
-        $fresh = '--fresh';
-        $seed = '--seed';
+        $options = $action === 'fresh' ? '--fresh --seed' : '';
 
-        Artisan::call("tenants:migrations {$tenant->id} {$fresh} {$seed} ");
+        Artisan::call("tenants:migrations {$tenant->id} {$options}");
 
         (new TenantManager())->setDefaultConnection();
+        $tenant->migrated = true;
+        $tenant->save();
 
         return redirect()->route('tenant.index');
     }
