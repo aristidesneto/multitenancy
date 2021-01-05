@@ -2,6 +2,7 @@
 
 namespace Aristides\Multitenancy\Http\Controllers;
 
+use Aristides\Multitenancy\Events\TenantCreate;
 use Aristides\Multitenancy\Models\Tenant;
 use Aristides\Multitenancy\Tenant\TenantManager;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -32,7 +33,9 @@ class TenantController extends BaseCOntroller
         $data = $request->all();
         $data['uuid'] = Uuid::uuid4();
 
-        Tenant::create($data);
+        $tenant = Tenant::create($data);
+
+        event(new TenantCreate($tenant));
 
         return redirect()->route('tenant.index');
     }

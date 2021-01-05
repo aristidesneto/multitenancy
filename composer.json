@@ -45,7 +45,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Aristides\\Multitenancy\\MultitenancyServiceProvider"
+                "Aristides\\Multitenancy\\MultitenancyServiceProvider\\Providers"
             ],
             "aliases": {
                 "Multitenancy": "Aristides\\Multitenancy\\MultitenancyFacade"
