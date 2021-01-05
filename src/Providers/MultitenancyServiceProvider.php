@@ -2,10 +2,16 @@
 
 namespace Aristides\Multitenancy\Providers;
 
+use Illuminate\Routing\Router;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Aristides\Multitenancy\Tenant\TenantManager;
 use Aristides\Multitenancy\Providers\EventServiceProvider;
 use Aristides\Multitenancy\Commands\TenantMigrationsCommand;
+use Aristides\Multitenancy\Http\Middleware\TenantMiddleware;
+use Aristides\Multitenancy\Http\Middleware\CheckDomainMainMiddleware;
+use Aristides\Multitenancy\Http\Middleware\CheckTenantMiddleware;
 
 class MultitenancyServiceProvider extends ServiceProvider
 {
@@ -16,11 +22,16 @@ class MultitenancyServiceProvider extends ServiceProvider
         $this->configurePublishing();
         $this->configureCommands();
         $this->configureRoutes();
+        $this->configureMiddlewares();
     }
 
     public function register()
     {
         $this->app->register(EventServiceProvider::class);
+
+        $this->app->bind('multitenancy', function($app) {
+            return new TenantManager();
+        });
 
         $this->mergeConfigFrom(__DIR__ . '/../../config/multitenancy.php', 'multitenancy');
     }
@@ -76,12 +87,25 @@ class MultitenancyServiceProvider extends ServiceProvider
 
     public function configureRoutes()
     {
+        $middlewares = config('multitenancy.middleware');
+        array_push($middlewares, config('multitenancy.middleware_main'));
+
         Route::namespace('Aristides\Multitenancy\Http\Controllers')
-            ->middleware(config('multitenancy.middleware'))
+            ->middleware($middlewares)
             ->prefix(config('multitenancy.prefix'))
             ->group(function () {
                 $this->loadRoutesFrom(__DIR__. '/../routes/master.php');
             });
+    }
+
+    public function configureMiddlewares()
+    {
+        $kernel = $this->app->make(Kernel::class);
+        $kernel->pushMiddleware(TenantMiddleware::class);
+
+        $router = $this->app->make(Router::class);
+        $router->aliasMiddleware(config('multitenancy.middleware_main'), CheckDomainMainMiddleware::class);
+        $router->aliasMiddleware(config('multitenancy.middleware_tenant'), CheckTenantMiddleware::class);
     }
 
     public static function migrationFileExists(string $migrationFileName): bool

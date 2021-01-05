@@ -6,9 +6,12 @@ return [
 
     'middleware' => [
         'web',
-        'auth',
-        'check.domain.main'
+        'auth'
     ],
+
+    'middleware_main' => 'check.domain.main',
+
+    'middleware_tenant' => 'check.tenant',
 
     'prefix' => 'tenants'
 
