@@ -10,7 +10,7 @@
     "authors": [
         {
             "name": "Arisides Neto",
-            "email": "aristidesbneto@gmail.com",
+            "email": "falecom@aristides.dev",
             "homepage": "https://aristides.dev",
             "role": "Developer"
         }
@@ -53,15 +53,5 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "funding": [
-        {
-            "type": "github",
-            "url": "https://github.com/sponsors/spatie"
-        },
-        {
-            "type": "other",
-            "url": "https://spatie.be/open-source/support-us"
-        }
-    ]
+    "prefer-stable": true
 }
