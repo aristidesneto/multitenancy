@@ -25,16 +25,6 @@ class MultitenancyServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../../config/multitenancy.php', 'multitenancy');
     }
 
-    public function configureRoutes()
-    {
-        Route::namespace('Aristides\Multitenancy\Http\Controllers')
-            ->middleware(config('multitenancy.middleware'))
-            ->prefix(config('multitenancy.prefix'))
-            ->group(function () {
-                $this->loadRoutesFrom(__DIR__. '/../routes/master.php');
-            });
-    }
-
     protected function configurePublishing()
     {
         if ($this->app->runningInConsole()) {
@@ -82,6 +72,16 @@ class MultitenancyServiceProvider extends ServiceProvider
         $this->commands([
             TenantMigrationsCommand::class,
         ]);
+    }
+
+    public function configureRoutes()
+    {
+        Route::namespace('Aristides\Multitenancy\Http\Controllers')
+            ->middleware(config('multitenancy.middleware'))
+            ->prefix(config('multitenancy.prefix'))
+            ->group(function () {
+                $this->loadRoutesFrom(__DIR__. '/../routes/master.php');
+            });
     }
 
     public static function migrationFileExists(string $migrationFileName): bool
