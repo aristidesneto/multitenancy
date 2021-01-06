@@ -2,16 +2,28 @@
 
 return [
 
-    'domain_main' => 'master.tenancy.test',
+    /*
+    |--------------------------------------------------------------------------
+    | Base Domain
+    |--------------------------------------------------------------------------
+    |
+    | Este é o sub
+    | This is the subdomain where Canvas will be accessible from. If the
+    | domain is set to null, Canvas will reside under the defined base
+    | path below. Otherwise, this will be used as the subdomain.
+    |
+    */
+    'domain_main' => 'tenancy.test',
 
-    'middleware' => [
+    'middleware_admin' => [
         'web',
         'auth'
     ],
 
-    'middleware_main' => 'check.domain.main',
-
-    'middleware_tenant' => 'check.tenant',
+    'middleware_tenant' => [
+        'web',
+        'auth'
+    ],
 
     'prefix' => 'tenants'
 

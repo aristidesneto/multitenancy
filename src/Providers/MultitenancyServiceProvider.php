@@ -7,14 +7,19 @@ use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Aristides\Multitenancy\Tenant\TenantManager;
+use Aristides\Multitenancy\Providers\BladeServiceProvider;
 use Aristides\Multitenancy\Providers\EventServiceProvider;
 use Aristides\Multitenancy\Commands\TenantMigrationsCommand;
 use Aristides\Multitenancy\Http\Middleware\TenantMiddleware;
-use Aristides\Multitenancy\Http\Middleware\CheckDomainMainMiddleware;
 use Aristides\Multitenancy\Http\Middleware\CheckTenantMiddleware;
+use Aristides\Multitenancy\Http\Middleware\CheckDomainMainMiddleware;
 
 class MultitenancyServiceProvider extends ServiceProvider
 {
+    private $middlewareAdmin = 'check.domain.main';
+
+    private $middlewareTenant = 'check.tenant';
+
     public function boot()
     {
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'multitenancy');
@@ -28,6 +33,7 @@ class MultitenancyServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(EventServiceProvider::class);
+        $this->app->register(BladeServiceProvider::class);
 
         $this->app->bind('multitenancy', function($app) {
             return new TenantManager();
@@ -83,6 +89,21 @@ class MultitenancyServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../../resources/views' => base_path('resources/views/vendor/multitenancy'),
             ], 'multitenancy-views');
+
+            // Routes
+            $this->publishes([
+                __DIR__. '/../routes/tenant.php.stub' => base_path('routes/tenant.php'),
+            ], 'multitenancy-routes');
+
+            // Controller App Tenant
+            $this->publishes([
+                __DIR__. '/../Http/Controllers/AppController.php.stub' => app_path('Http/Controllers/Tenants/AppController.php'),
+            ], 'multitenancy-controller');
+
+            // Model App Tenant
+            $this->publishes([
+                __DIR__. '/../Models/Tenants/Post.php.stub' => app_path('Models/Tenants/Post.php'),
+            ], 'multitenancy-model');
         }
     }
 
@@ -95,14 +116,23 @@ class MultitenancyServiceProvider extends ServiceProvider
 
     public function configureRoutes()
     {
-        $middlewares = config('multitenancy.middleware');
-        array_push($middlewares, config('multitenancy.middleware_main'));
+        $middlewares = config('multitenancy.middleware_admin');
+        array_push($middlewares, $this->middlewareAdmin);
 
         Route::namespace('Aristides\Multitenancy\Http\Controllers')
             ->middleware($middlewares)
             ->prefix(config('multitenancy.prefix'))
             ->group(function () {
                 $this->loadRoutesFrom(__DIR__. '/../routes/master.php');
+            });
+
+        $middlewares = config('multitenancy.middleware_tenant');
+        array_push($middlewares, $this->middlewareTenant);
+
+        Route::namespace('Aristides\Multitenancy\Http\Controllers')
+            ->middleware($middlewares)
+            ->group(function () {
+                $this->loadRoutesFrom(base_path('routes/tenant.php'));
             });
     }
 
@@ -112,8 +142,8 @@ class MultitenancyServiceProvider extends ServiceProvider
         $kernel->pushMiddleware(TenantMiddleware::class);
 
         $router = $this->app->make(Router::class);
-        $router->aliasMiddleware(config('multitenancy.middleware_main'), CheckDomainMainMiddleware::class);
-        $router->aliasMiddleware(config('multitenancy.middleware_tenant'), CheckTenantMiddleware::class);
+        $router->aliasMiddleware($this->middlewareAdmin, CheckDomainMainMiddleware::class);
+        $router->aliasMiddleware($this->middlewareTenant, CheckTenantMiddleware::class);
     }
 
     public static function migrationFileExists(string $migrationFileName, string $path = null) : bool

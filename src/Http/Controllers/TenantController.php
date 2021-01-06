@@ -14,7 +14,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Artisan;
 use Ramsey\Uuid\Uuid;
 
-class TenantController extends BaseCOntroller
+class TenantController extends BaseController
 {
     use AuthorizesRequests;
     use DispatchesJobs;
@@ -23,9 +23,11 @@ class TenantController extends BaseCOntroller
     public function index()
     {
         $tenants = Tenant::orderBy('name')->get();
+        $domain = explode(".", config('multitenancy.domain_main'), 2);
 
         return view('multitenancy::tenants', [
-            'tenants' => $tenants
+            'tenants' => $tenants,
+            'domain' => ".$domain[1]"
         ]);
     }
 

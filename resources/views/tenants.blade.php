@@ -31,7 +31,7 @@
                         @foreach ($tenants as $tenant)
                             <tr>
                                 <th scope="row">{{ $loop->iteration }}</th>
-                                <td>{{ $tenant->name }}</td>
+                                <td><a href="//{{ $tenant->domain . $domain }}" target="_blank">{{ $tenant->name }}</a></td>
                                 <td>{{ $tenant->domain }}</td>
                                 <td>{{ $tenant->db_host }}</td>
                                 <td>{{ $tenant->db_name }}</td>

@@ -48,7 +48,8 @@ class TenantMiddleware
 
     public function getTenant($host)
     {
-        return Tenant::where('domain', $host)->first();
+        $host = explode('.', $host, 2);
+        return Tenant::where('domain', $host[0])->first();
     }
 
     public function setSessionTenant($tenant) : void
