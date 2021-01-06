@@ -32,9 +32,32 @@ return [
 ];
 ```
 
-## Uso
+## Configuração
+
+É necessário criar uma nova conexão que será utilizada pelos tenants. Para isso abra o arquivo `config/database.php` e duplique a conexão atual `mysql` e crie outra com o nome de `tenant`.
 
 ```php
+'connections' => [
+    'tenant' => [
+        'driver' => 'mysql',
+        'url' => env('DATABASE_URL'),
+        'host' => env('DB_HOST', '127.0.0.1'),
+        'port' => env('DB_PORT', '3306'),
+        'database' => env('DB_DATABASE', 'forge'),
+        'username' => env('DB_USERNAME', 'forge'),
+        'password' => env('DB_PASSWORD', ''),
+        'unix_socket' => env('DB_SOCKET', ''),
+        'charset' => 'utf8mb4',
+        'collation' => 'utf8mb4_unicode_ci',
+        'prefix' => '',
+        'prefix_indexes' => true,
+        'strict' => true,
+        'engine' => null,
+        'options' => extension_loaded('pdo_mysql') ? array_filter([
+            PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+        ]) : [],
+    ],
+]
 ...
 ```
 
