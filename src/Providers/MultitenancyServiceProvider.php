@@ -13,6 +13,7 @@ use Aristides\Multitenancy\Commands\TenantMigrationsCommand;
 use Aristides\Multitenancy\Http\Middleware\TenantMiddleware;
 use Aristides\Multitenancy\Http\Middleware\CheckTenantMiddleware;
 use Aristides\Multitenancy\Http\Middleware\CheckDomainMainMiddleware;
+use Aristides\Multitenancy\Multitenancy;
 
 class MultitenancyServiceProvider extends ServiceProvider
 {
@@ -36,7 +37,7 @@ class MultitenancyServiceProvider extends ServiceProvider
         $this->app->register(BladeServiceProvider::class);
 
         $this->app->bind('multitenancy', function($app) {
-            return new TenantManager();
+            return new Multitenancy();
         });
 
         $this->mergeConfigFrom(__DIR__ . '/../../config/multitenancy.php', 'multitenancy');
