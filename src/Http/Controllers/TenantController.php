@@ -5,6 +5,7 @@ namespace Aristides\Multitenancy\Http\Controllers;
 use Aristides\Multitenancy\Events\TenantCreate;
 use Aristides\Multitenancy\Models\Tenant;
 use Aristides\Multitenancy\Tenant\TenantManager;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -21,11 +22,18 @@ class TenantController extends BaseCOntroller
 
     public function index()
     {
-        $tenants = Tenant::get();
+        $tenants = Tenant::orderBy('name')->get();
+
+        return view('multitenancy::tenants', [
+            'tenants' => $tenants
+        ]);
+    }
+
+    public function create()
+    {
         $domain = explode(".", config('multitenancy.domain_main'), 2);
 
-        return view('multitenancy::dashboard', [
-            'tenants' => $tenants,
+        return view('multitenancy::create', [
             'domain' => ".$domain[1]"
         ]);
     }
@@ -58,12 +66,26 @@ class TenantController extends BaseCOntroller
     {
         $tenant = Tenant::where('uuid', $uuid)->first();
 
+        if ($tenant->production) {
+            throw new \Exception();
+        }
+
         $options = $action === 'fresh' ? '--fresh --seed' : '';
 
         Artisan::call("tenants:migrations {$tenant->id} {$options}");
 
         (new TenantManager())->setDefaultConnection();
         $tenant->migrated = true;
+        $tenant->save();
+
+        return redirect()->route('tenant.index');
+    }
+
+    public function production(string $uuid)
+    {
+        $tenant = Tenant::where('uuid', $uuid)->first();
+        $tenant->production = true;
+        $tenant->production_at = Carbon::now();
         $tenant->save();
 
         return redirect()->route('tenant.index');

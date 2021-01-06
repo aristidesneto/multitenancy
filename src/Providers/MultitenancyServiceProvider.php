@@ -55,15 +55,23 @@ class MultitenancyServiceProvider extends ServiceProvider
 
             // Tenants migrations
             $migrationTenantsFileName = '2014_10_12_000000_create_users_table.php';
-            if (! $this->migrationTenantsFileExists($migrationTenantsFileName)) {
+            if (! $this->migrationFileExists($migrationTenantsFileName, 'tenants')) {
                 $this->publishes([
                     __DIR__ . "/../../database/migrations/tenants" => database_path('migrations/tenants/'),
-                ], 'multitenancy-tenants-migrations');
+                ], 'multitenancy-migrations');
             }
 
             // Seeder
             $this->publishes([
+                __DIR__ . "/../../database/seeder/DatabaseSeeder.php.stub" => database_path('seeders/DatabaseSeeder.php'),
+            ], 'multitenancy-seeder');
+
+            $this->publishes([
                 __DIR__ . "/../../database/seeder/TenantSeeder.php.stub" => database_path('seeders/TenantSeeder.php'),
+            ], 'multitenancy-seeder');
+
+            $this->publishes([
+                __DIR__ . "/../../database/seeder/UserSeeder.php.stub" => database_path('seeders/UserSeeder.php'),
             ], 'multitenancy-seeder');
 
             // Assets
@@ -108,22 +116,11 @@ class MultitenancyServiceProvider extends ServiceProvider
         $router->aliasMiddleware(config('multitenancy.middleware_tenant'), CheckTenantMiddleware::class);
     }
 
-    public static function migrationFileExists(string $migrationFileName): bool
+    public static function migrationFileExists(string $migrationFileName, string $path = null) : bool
     {
         $len = strlen($migrationFileName);
-        foreach (glob(database_path("migrations/*.php")) as $filename) {
-            if ((substr($filename, -$len) === $migrationFileName)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static function migrationTenantsFileExists(string $migrationFileName): bool
-    {
-        $len = strlen($migrationFileName);
-        foreach (glob(database_path("migrations/tenants/*.php")) as $filename) {
+        $path = $path === 'tenants' ? 'tenants/' : '';
+        foreach (glob(database_path("migrations/{$path}*.php")) as $filename) {
             if ((substr($filename, -$len) === $migrationFileName)) {
                 return true;
             }

@@ -18,6 +18,8 @@ class CreateTenantsTable extends Migration
             $table->string('db_user');
             $table->string('db_pass')->nullable();
             $table->boolean('migrated')->default(0);
+            $table->boolean('production')->default(0);
+            $table->datetime('production_at')->nullable();
             $table->timestamps();
         });
     }
