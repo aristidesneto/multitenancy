@@ -10,6 +10,7 @@ use Aristides\Multitenancy\Tenant\TenantManager;
 use Aristides\Multitenancy\Providers\BladeServiceProvider;
 use Aristides\Multitenancy\Providers\EventServiceProvider;
 use Aristides\Multitenancy\Commands\TenantMigrationsCommand;
+use Aristides\Multitenancy\Commands\InstallMultitenancyCommand;
 use Aristides\Multitenancy\Http\Middleware\TenantMiddleware;
 use Aristides\Multitenancy\Http\Middleware\CheckTenantMiddleware;
 use Aristides\Multitenancy\Http\Middleware\CheckDomainMainMiddleware;
@@ -70,40 +71,48 @@ class MultitenancyServiceProvider extends ServiceProvider
 
             // Seeder
             $this->publishes([
-                __DIR__ . "/../../database/seeder/DatabaseSeeder.php.stub" => database_path('seeders/DatabaseSeeder.php'),
+                __DIR__ . "/../../stubs/Seeder/DatabaseSeeder.php" => database_path('seeders/DatabaseSeeder.php'),
             ], 'multitenancy-seeder');
 
             $this->publishes([
-                __DIR__ . "/../../database/seeder/TenantSeeder.php.stub" => database_path('seeders/TenantSeeder.php'),
+                __DIR__ . "/../../stubs/Seeder/TenantSeeder.php" => database_path('seeders/TenantSeeder.php'),
             ], 'multitenancy-seeder');
 
             $this->publishes([
-                __DIR__ . "/../../database/seeder/UserSeeder.php.stub" => database_path('seeders/UserSeeder.php'),
+                __DIR__ . "/../../stubs/Seeder/UserSeeder.php" => database_path('seeders/UserSeeder.php'),
             ], 'multitenancy-seeder');
 
             // Assets
-            $this->publishes([
-                __DIR__ . "/../../resources/assets" => public_path('vendor/multitenancy'),
-            ], 'multitenancy-assets');
+            // $this->publishes([
+            //     __DIR__ . "/../../resources/assets" => public_path('vendor/multitenancy'),
+            // ], 'multitenancy-assets');
 
             // Views
             $this->publishes([
-                __DIR__ . '/../../resources/views' => base_path('resources/views/vendor/multitenancy'),
+                __DIR__ . '/../../stubs/resources/views/tenants/index.blade.php' => base_path('resources/views/vendor/multitenancy/tenants/index.blade.php'),
+            ], 'multitenancy-views');
+
+            $this->publishes([
+                __DIR__ . '/../../stubs/resources/views/dashboard.blade.php' => base_path('resources/views/dashboard.blade.php'),
             ], 'multitenancy-views');
 
             // Routes
             $this->publishes([
-                __DIR__. '/../routes/tenant.php.stub' => base_path('routes/tenant.php'),
+                __DIR__. '/../../stubs/routes/tenant.php' => base_path('routes/tenant.php'),
             ], 'multitenancy-routes');
 
             // Controller App Tenant
             $this->publishes([
-                __DIR__. '/../Http/Controllers/AppController.php.stub' => app_path('Http/Controllers/Tenants/AppController.php'),
+                __DIR__. '/../../stubs/Http/Controllers/AppController.php' => app_path('Http/Controllers/Tenants/AppController.php'),
+            ], 'multitenancy-controller');
+
+            $this->publishes([
+                __DIR__. '/../../stubs/Http/Controllers/AppController.php' => app_path('Http/Controllers/Tenants/AppController.php'),
             ], 'multitenancy-controller');
 
             // Model App Tenant
             $this->publishes([
-                __DIR__. '/../Models/Tenants/Post.php.stub' => app_path('Models/Tenants/Post.php'),
+                __DIR__. '/../../stubs/Models/Tenants/Post.php' => app_path('Models/Tenants/Post.php'),
             ], 'multitenancy-model');
         }
     }
@@ -111,6 +120,7 @@ class MultitenancyServiceProvider extends ServiceProvider
     protected function configureCommands()
     {
         $this->commands([
+            InstallMultitenancyCommand::class,
             TenantMigrationsCommand::class,
         ]);
     }
@@ -127,14 +137,16 @@ class MultitenancyServiceProvider extends ServiceProvider
                 $this->loadRoutesFrom(__DIR__. '/../routes/master.php');
             });
 
-        $middlewares = config('multitenancy.middleware_tenant');
-        array_push($middlewares, $this->middlewareTenant);
+        if (file_exists(base_path('routes/tenant.php'))) {
+            $middlewares = config('multitenancy.middleware_tenant');
+            array_push($middlewares, $this->middlewareTenant);
 
-        Route::namespace('Aristides\Multitenancy\Http\Controllers')
-            ->middleware($middlewares)
-            ->group(function () {
-                $this->loadRoutesFrom(base_path('routes/tenant.php'));
-            });
+            Route::namespace('App\Http\Controllers\Tenants')
+                ->middleware($middlewares)
+                ->group(function () {
+                    $this->loadRoutesFrom(base_path('routes/tenant.php'));
+                });
+        }
     }
 
     public function configureMiddlewares()

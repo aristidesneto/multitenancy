@@ -28,6 +28,20 @@ class InstallMultitenancyCommand extends Command
      */
     public function handle()
     {
+        $this->info('Installing Laravel Breeze');
+
+        $command = "composer require laravel/breeze --dev";
+        $path = base_path();
+        shell_exec("cd {$path} && {$command}");
+
+        $this->info('Breeze scaffolding installed successfully.');
+
+        $this->info('Installing multitenancy package');
+
+        sleep(5);
+
+        Artisan::call('migrate --seed');
+
         Artisan::call('breeze:install');
 
         Artisan::call('vendor:publish', [
@@ -39,7 +53,8 @@ class InstallMultitenancyCommand extends Command
         ]);
 
         Artisan::call('vendor:publish', [
-            '--tag' =>  'multitenancy-seeder'
+            '--tag' =>  'multitenancy-seeder',
+            '--force' => true
         ]);
 
         Artisan::call('vendor:publish', [
@@ -61,5 +76,11 @@ class InstallMultitenancyCommand extends Command
         Artisan::call('vendor:publish', [
             '--tag' =>  'multitenancy-model'
         ]);
+
+        $this->info('Multitenancy installed successfully');
+
+        $this->comment('Running "npm install && npm run dev" command to build your assets.');
+
+        shell_exec("cd {$path} && npm install && npm run dev");
     }
 }

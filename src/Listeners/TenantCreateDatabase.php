@@ -18,7 +18,7 @@ class TenantCreateDatabase
             COLLATE utf8mb4_unicode_ci"
         );
 
-        Artisan::call("tenants:migrations {$tenant->id}");
+        Artisan::call("multitenancy:migrations {$tenant->id}");
 
         $tenant->migrated = true;
         $tenant->save();

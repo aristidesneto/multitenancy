@@ -26,7 +26,7 @@ class TenantController extends BaseController
         $tenants = Tenant::orderBy('name')->get();
         $domain = explode(".", config('multitenancy.domain_main'), 2);
 
-        return view('multitenancy::tenants', [
+        return view('multitenancy::index', [
             'tenants' => $tenants,
             'domain' => ".$domain[1]"
         ]);
@@ -60,17 +60,17 @@ class TenantController extends BaseController
 
         DB::commit();
 
-        return redirect()->route('tenant.index');
+        return redirect()->route('tenants.index');
     }
 
     public function migration(Request $request)
     {
-        Artisan::call('tenants:migrations');
+        Artisan::call('multitenancy:migrations');
 
         (new TenantManager())->setDefaultConnection();
         Tenant::query()->where('migrated', false)->update(['migrated' => true]);
 
-        return redirect()->route('tenant.index');
+        return redirect()->route('tenants.index');
     }
 
     public function migrationByUuid(string $uuid, string $action = null)
@@ -83,13 +83,13 @@ class TenantController extends BaseController
 
         $options = $action === 'fresh' ? '--fresh --seed' : '';
 
-        Artisan::call("tenants:migrations {$tenant->id} {$options}");
+        Artisan::call("multitenancy:migrations {$tenant->id} {$options}");
 
         (new TenantManager())->setDefaultConnection();
         $tenant->migrated = true;
         $tenant->save();
 
-        return redirect()->route('tenant.index');
+        return redirect()->route('tenants.index');
     }
 
     public function production(string $uuid)
@@ -99,6 +99,6 @@ class TenantController extends BaseController
         $tenant->production_at = Carbon::now();
         $tenant->save();
 
-        return redirect()->route('tenant.index');
+        return redirect()->route('tenants.index');
     }
 }
