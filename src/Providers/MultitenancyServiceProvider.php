@@ -82,11 +82,6 @@ class MultitenancyServiceProvider extends ServiceProvider
                 __DIR__ . "/../../stubs/Seeder/UserSeeder.php" => database_path('seeders/UserSeeder.php'),
             ], 'multitenancy-seeder');
 
-            // Assets
-            // $this->publishes([
-            //     __DIR__ . "/../../resources/assets" => public_path('vendor/multitenancy'),
-            // ], 'multitenancy-assets');
-
             // Views
             $this->publishes([
                 __DIR__ . '/../../stubs/resources/views/tenants/index.blade.php' => base_path('resources/views/vendor/multitenancy/tenants/index.blade.php'),
