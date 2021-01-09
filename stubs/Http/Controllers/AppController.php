@@ -18,7 +18,7 @@ class AppController extends BaseController
     public function index()
     {
         $posts = Post::latest()->get();
-        return view('multitenancy::app.index', [
+        return view('multitenancy::tenants.index', [
             'posts' => $posts
         ]);
     }

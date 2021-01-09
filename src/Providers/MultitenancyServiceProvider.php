@@ -47,68 +47,9 @@ class MultitenancyServiceProvider extends ServiceProvider
     protected function configurePublishing()
     {
         if ($this->app->runningInConsole()) {
-
-            // Config file
             $this->publishes([
                 __DIR__ . '/../../config/multitenancy.php' => config_path('multitenancy.php'),
             ], 'multitenancy-config');
-
-            // Master migrations
-            $migrationFileName = 'create_tenants_table.php';
-            if (! $this->migrationFileExists($migrationFileName)) {
-                $this->publishes([
-                    __DIR__ . "/../../database/migrations/{$migrationFileName}.stub" => database_path('migrations/' . date('Y_m_d_His', time()) . '_' . $migrationFileName),
-                ], 'multitenancy-migrations');
-            }
-
-            // Tenants migrations
-            $migrationTenantsFileName = '2014_10_12_000000_create_users_table.php';
-            if (! $this->migrationFileExists($migrationTenantsFileName, 'tenants')) {
-                $this->publishes([
-                    __DIR__ . "/../../database/migrations/tenants" => database_path('migrations/tenants/'),
-                ], 'multitenancy-migrations');
-            }
-
-            // Seeder
-            $this->publishes([
-                __DIR__ . "/../../stubs/Seeder/DatabaseSeeder.php" => database_path('seeders/DatabaseSeeder.php'),
-            ], 'multitenancy-seeder');
-
-            $this->publishes([
-                __DIR__ . "/../../stubs/Seeder/TenantSeeder.php" => database_path('seeders/TenantSeeder.php'),
-            ], 'multitenancy-seeder');
-
-            $this->publishes([
-                __DIR__ . "/../../stubs/Seeder/UserSeeder.php" => database_path('seeders/UserSeeder.php'),
-            ], 'multitenancy-seeder');
-
-            // Views
-            $this->publishes([
-                __DIR__ . '/../../stubs/resources/views/tenants/index.blade.php' => base_path('resources/views/vendor/multitenancy/tenants/index.blade.php'),
-            ], 'multitenancy-views');
-
-            $this->publishes([
-                __DIR__ . '/../../stubs/resources/views/dashboard.blade.php' => base_path('resources/views/dashboard.blade.php'),
-            ], 'multitenancy-views');
-
-            // Routes
-            $this->publishes([
-                __DIR__. '/../../stubs/routes/tenant.php' => base_path('routes/tenant.php'),
-            ], 'multitenancy-routes');
-
-            // Controller App Tenant
-            $this->publishes([
-                __DIR__. '/../../stubs/Http/Controllers/AppController.php' => app_path('Http/Controllers/Tenants/AppController.php'),
-            ], 'multitenancy-controller');
-
-            $this->publishes([
-                __DIR__. '/../../stubs/Http/Controllers/AppController.php' => app_path('Http/Controllers/Tenants/AppController.php'),
-            ], 'multitenancy-controller');
-
-            // Model App Tenant
-            $this->publishes([
-                __DIR__. '/../../stubs/Models/Tenants/Post.php' => app_path('Models/Tenants/Post.php'),
-            ], 'multitenancy-model');
         }
     }
 
