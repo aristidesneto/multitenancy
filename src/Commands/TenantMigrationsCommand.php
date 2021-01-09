@@ -14,7 +14,7 @@ class TenantMigrationsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'tenants:migrations {id?} {--fresh} {--seed}';
+    protected $signature = 'multitenancy:migrations {id?} {--fresh} {--seed}';
 
     /**
      * The console command description.

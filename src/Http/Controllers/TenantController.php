@@ -12,6 +12,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 class TenantController extends BaseController
@@ -45,11 +46,19 @@ class TenantController extends BaseController
         $data = $request->all();
         $data['uuid'] = Uuid::uuid4();
 
+        DB::beginTransaction();
+
         $tenant = Tenant::create($data);
 
         if ($request->create_database) {
-            event(new TenantCreate($tenant));
+            $createDatabase = event(new TenantCreate($tenant));
+
+            if (!$createDatabase) {
+                DB::rollBack();
+            }
         }
+
+        DB::commit();
 
         return redirect()->route('tenant.index');
     }

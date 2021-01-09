@@ -13,7 +13,7 @@ return [
     | path below. Otherwise, this will be used as the subdomain.
     |
     */
-    'domain_main' => 'tenancy.test',
+    'domain_main' => 'master.tenancy.test',
 
     'middleware_admin' => [
         'web',

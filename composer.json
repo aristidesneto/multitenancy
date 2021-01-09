@@ -21,6 +21,7 @@
     },
     "require-dev": {
         "orchestra/testbench": "^6.0",
+        "laravel/breeze": "^1.0",
         "phpunit/phpunit": "^9.3"
     },
     "autoload": {

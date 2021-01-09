@@ -13,7 +13,7 @@ class TenantCreateDatabase
         $tenant = $event->getTenant();
 
         DB::statement("
-            CREATE DATABASE {$tenant->db_name}
+            CREATE DATABASE IF NOT EXISTS {$tenant->db_name}
             CHARACTER SET utf8mb4
             COLLATE utf8mb4_unicode_ci"
         );
