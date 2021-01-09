@@ -94,17 +94,4 @@ class MultitenancyServiceProvider extends ServiceProvider
         $router->aliasMiddleware($this->middlewareAdmin, CheckDomainMainMiddleware::class);
         $router->aliasMiddleware($this->middlewareTenant, CheckTenantMiddleware::class);
     }
-
-    public static function migrationFileExists(string $migrationFileName, string $path = null) : bool
-    {
-        $len = strlen($migrationFileName);
-        $path = $path === 'tenants' ? 'tenants/' : '';
-        foreach (glob(database_path("migrations/{$path}*.php")) as $filename) {
-            if ((substr($filename, -$len) === $migrationFileName)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
