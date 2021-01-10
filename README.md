@@ -10,11 +10,11 @@ Esse pacote foi desenvolvido para ser um starter kit de um projeto Multitenancy 
 
 Para que funcione corretamente, será necessário configurar 3 domínios para nossa aplicação, são eles:
 
-1. master.tenancy.test
+1. master.tenancy.test (dmonínio utilizado para gerenciar os tenants)
 2. client1.tenancy.test
 3. client2.tenancy.test
 
-Para isso, edite seu arquivos `hosts` localizado em `/etc/hosts` no caso do Linux. Adicione as seguintes linhas no final do arquivo:
+Para isso, edite seu arquivo `hosts` localizado em `/etc/hosts` no caso do Linux. Adicione as seguintes linhas no final do arquivo:
 
 ```
 127.0.0.1   master.tenancy.test
@@ -81,7 +81,7 @@ volumes:
     driver: local
 ```
 
-Altere o arquivo `.env` a conexão com o banco de dados e deixe da seguinte forma.
+Altere no arquivo `.env` a conexão com o banco de dados e deixe da seguinte forma.
 
 ```yml
 DB_CONNECTION=mysql
@@ -166,6 +166,7 @@ E-mail: admin@admin.com
 Senha: password
 ```
 
+![Listagens de Tenants](./docs/imgs/listagens-tenants.png)
 
 ## Teste
 
