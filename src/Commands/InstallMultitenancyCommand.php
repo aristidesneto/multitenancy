@@ -4,6 +4,7 @@ namespace Aristides\Multitenancy\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Artisan;
 
 class InstallMultitenancyCommand extends Command
@@ -31,25 +32,27 @@ class InstallMultitenancyCommand extends Command
     {
         $this->info('Installing Laravel Breeze');
 
-        $command = "composer require laravel/breeze --dev";
-        $path = base_path();
-        shell_exec("cd {$path} && {$command}");
+        (new Process(['composer', 'require', 'laravel/breeze', '--dev']))
+            ->setTimeOut(null)
+            ->disableOutput()
+            ->run();
 
-        $this->info('Breeze scaffolding installed successfully.');
+        (new Process(['php', 'artisan', 'breeze:install']))
+            ->setTimeOut(null)
+            ->disableOutput()
+            ->run();
 
-        $this->info('Installing multitenancy package');
-
-        sleep(5);
-
-        Artisan::call('breeze:install');
+        $this->info('Installing Multitenancy');
 
         Artisan::call('vendor:publish', [
             '--tag' =>  'multitenancy-config'
         ]);
 
         // Migrations
+        if (! $this->migrationFileExists('create_tenants_table.php')) {
+            copy(__DIR__.'/../../stubs/migrations/create_tenants_table.php', database_path('migrations/2021_01_10_000000_create_tenants_table.php'));
+        }
         (new Filesystem)->ensureDirectoryExists(database_path('migrations/tenants'));
-        copy(__DIR__.'/../../stubs/migrations/create_tenants_table.php', database_path('migrations/' . date('Y_m_d_His', time()) . '_' . 'create_tenants_table.php'));
         (new Filesystem)->copyDirectory(__DIR__.'/../../stubs/migrations/tenants', database_path('migrations/tenants'));
 
         // Seeder
@@ -73,16 +76,37 @@ class InstallMultitenancyCommand extends Command
         (new Filesystem)->ensureDirectoryExists(app_path('Models/Tenants'));
         copy(__DIR__.'/../../stubs/Models/Tenants/Post.php', app_path('Models/Tenants/Post.php'));
 
-        // Docker compose
-        copy(__DIR__.'/../../stubs/docker-compose.yml', base_path('docker-compose.yml'));
-
         Artisan::call('migrate --seed');
 
+        $this->info('Running "npm install && npm run dev" command to build your assets. Waiting...');
+
+        (new Process(['npm', 'install']))
+            ->setTimeOut(null)
+            ->disableOutput()
+            ->run();
+
+        (new Process(['npm', 'run', 'dev']))
+            ->setTimeOut(null)
+            ->disableOutput()
+            ->run();
+
         $this->info('Multitenancy installed successfully');
-        $this->comment('Running "npm install && npm run dev" command to build your assets.');
+        $this->line('');
 
-        shell_exec("cd {$path} && npm install && npm run dev");
+        $this->comment('Go to http://' . config('multitenancy.domain_main'));
+        $this->comment('Email: admin@admin.com');
+        $this->comment('Password: password');
+    }
 
-        $this->comment('Successfully. Go to http://' . config('multitenancy.domain_main'));
+    public function migrationFileExists(string $migrationFileName): bool
+    {
+        $len = strlen($migrationFileName);
+        foreach (glob(database_path("migrations/*.php")) as $filename) {
+            if ((substr($filename, -$len) === $migrationFileName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
