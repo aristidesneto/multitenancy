@@ -111,7 +111,7 @@ cd /var/www/html
 Você pode instalar o pacote via composer:
 
 ```bash
-composer require aristides/multitenancy
+composer require aristidesneto/multitenancy
 ```
 
 
