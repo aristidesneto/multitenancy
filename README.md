@@ -166,6 +166,8 @@ E-mail: admin@admin.com
 Senha: password
 ```
 
+Tela de gerenciamento de tenants:
+
 ![Listagens de Tenants](./docs/imgs/listagens-tenants.png)
 
 ## Teste
