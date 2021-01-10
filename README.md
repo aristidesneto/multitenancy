@@ -159,16 +159,25 @@ Um dos requisitos do pacote é o Laravel Breeze. Ao executar o comando acima ser
 
 ## Uso
 
-Após a instalação finalizar com sucesso acesse `http://master.tenancy.test` e clique no menu para fazer login.
+Após a instalação finalizar com sucesso acesse `http://master.tenancy.test` e clique no menu para fazer login. Utilize os dados de acesso abaixo:
 
-```
+```bash
 E-mail: admin@admin.com
 Senha: password
 ```
 
+Após o login, você pode gerenciar os tenants, cadastrando e se necessário o zerando banco do tenant enquanto estiver em desenvolvimento.
+
 Tela de gerenciamento de tenants:
 
 ![Listagens de Tenants](./docs/imgs/listagens-tenants.png)
+
+Após cadastrar um tenant, na listagem clique sobre a URL disponível. Irá abrir uma nova aba com a URL criada, utilize os dados abaixo para realizar login:
+
+```bash
+E-mail: admin@tenant.com
+Senha: password
+```
 
 ## Teste
 
