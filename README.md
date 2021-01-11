@@ -66,7 +66,6 @@ services:
       MYSQL_DATABASE: '${DB_DATABASE}'
       MYSQL_USER: '${DB_USERNAME}'
       MYSQL_PASSWORD: '${DB_PASSWORD}'
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     volumes:
       - 'tenancydb:/var/lib/mysql'
     networks:
