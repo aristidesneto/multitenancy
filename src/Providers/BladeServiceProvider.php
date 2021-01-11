@@ -15,11 +15,11 @@ class BladeServiceProvider extends ServiceProvider
     public function boot()
     {
         Blade::if('tenant', function () {
-            return request()->getHost() !== config('multitenancy.domain_main');
+            return request()->getHost() !== config('multitenancy.base_domain');
         });
 
         Blade::if('tenantmain', function () {
-            return request()->getHost() === config('multitenancy.domain_main');
+            return request()->getHost() === config('multitenancy.base_domain');
         });
     }
 }

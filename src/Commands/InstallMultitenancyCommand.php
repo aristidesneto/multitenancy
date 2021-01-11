@@ -93,7 +93,7 @@ class InstallMultitenancyCommand extends Command
         $this->info('Multitenancy installed successfully');
         $this->line('');
 
-        $this->comment('Go to http://' . config('multitenancy.domain_main'));
+        $this->comment('Go to http://' . config('multitenancy.base_domain'));
         $this->comment('Email: admin@admin.com');
         $this->comment('Password: password');
     }

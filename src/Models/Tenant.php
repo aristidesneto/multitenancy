@@ -10,6 +10,20 @@ class Tenant extends Model
     use HasFactory;
 
     protected $fillable = [
-        'uuid', 'name', 'domain', 'db_host', 'db_name', 'db_user', 'migrated', 'production'
+        'uuid',
+        'name',
+        'subdomain',
+        'database_host',
+        'database_name',
+        'database_user',
+        'database_password',
+        'migrated',
+        'database_created',
+        'production_at',
+        'production'
+    ];
+
+    protected $dates = [
+        'production_at'
     ];
 }

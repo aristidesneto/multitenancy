@@ -44,7 +44,7 @@
                                             <div class="col-span-4 sm:col-span-4">
                                                 <label for="price" class="block text-sm font-medium text-gray-700">Subdomínio</label>
                                                 <div class="mt-1 relative rounded-md shadow-sm">
-                                                    <input type="text" name="domain" id="domain" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md">
+                                                    <input type="text" name="subdomain" id="subdomain" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md">
                                                     <div class="absolute bg-gray-100 p-2 inset-y-0 right-0 flex items-center text-gray-600 pr-3">
                                                         {{ $domain }}
                                                     </div>
@@ -57,23 +57,23 @@
                                             </div>
 
                                             <div class="col-span-6 sm:col-span-4">
-                                                <label for="db_host" class="block text-sm font-medium text-gray-700">Hostname</label>
-                                                <input type="text" name="db_host" id="db_host" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                <label for="database_host" class="block text-sm font-medium text-gray-700">Hostname</label>
+                                                <input type="text" name="database_host" id="database_host" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                             </div>
 
                                             <div class="col-span-6 sm:col-span-4">
-                                                <label for="db_name" class="block text-sm font-medium text-gray-700">Database</label>
-                                                <input type="text" name="db_name" id="db_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                <label for="database_name" class="block text-sm font-medium text-gray-700">Database</label>
+                                                <input type="text" name="database_name" id="database_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                             </div>
 
                                             <div class="col-span-6 sm:col-span-4">
-                                                <label for="db_user" class="block text-sm font-medium text-gray-700">Usuário</label>
-                                                <input type="text" name="db_user" id="db_user" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                <label for="database_user" class="block text-sm font-medium text-gray-700">Usuário</label>
+                                                <input type="text" name="database_user" id="database_user" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                             </div>
 
                                             <div class="col-span-6 sm:col-span-4">
-                                                <label for="db_pass" class="block text-sm font-medium text-gray-700">Senha</label>
-                                                <input type="password" name="db_pass" id="db_pass" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                <label for="database_password" class="block text-sm font-medium text-gray-700">Senha</label>
+                                                <input type="password" name="database_password" id="database_password" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                             </div>
 
                                             <fieldset>

@@ -11,11 +11,11 @@ class TenantManager
 {
     public function setConnection(Tenant $tenant) : void
     {
-        $password = env(Str::upper($tenant->db_name) . '_PASSWORD', $tenant->db_pass);
+        $password = env(Str::upper($tenant->database_name) . '_PASSWORD', $tenant->database_password);
 
-        config()->set('database.connections.tenant.host', $tenant->db_host);
-        config()->set('database.connections.tenant.database', $tenant->db_name);
-        config()->set('database.connections.tenant.username', $tenant->db_user);
+        config()->set('database.connections.tenant.host', $tenant->database_host);
+        config()->set('database.connections.tenant.database', $tenant->database_name);
+        config()->set('database.connections.tenant.username', $tenant->database_user);
         config()->set('database.connections.tenant.password', $password);
         config()->set('database.default', 'tenant');
 
@@ -34,9 +34,9 @@ class TenantManager
         return ! $this->checkDomain();
     }
 
-    private function checkDomain()
+    private function checkDomain() : bool
     {
-        return request()->getHost() === config('multitenancy.domain_main');
+        return request()->getHost() === config('multitenancy.base_domain');
     }
 
     public function setDefaultConnection() : void

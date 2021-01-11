@@ -2,10 +2,10 @@
 
 namespace Aristides\Multitenancy\Http\Middleware;
 
-use Aristides\Multitenancy\Models\Tenant;
-use Aristides\Multitenancy\Tenant\TenantManager;
 use Closure;
 use Illuminate\Http\Request;
+use Aristides\Multitenancy\Models\Tenant;
+use Aristides\Multitenancy\Tenant\TenantManager;
 
 class TenantMiddleware
 {
@@ -20,12 +20,11 @@ class TenantMiddleware
     {
         $manager = app(TenantManager::class);
 
-        $isDomainMain = $manager->isDomainMain();
+        $isBaseDomain = $manager->isDomainMain();
 
-        if ($isDomainMain) {
+        if ($isBaseDomain) {
             $this->setSessionTenant([
-                'name' => 'Master',
-                'uuid' => null,
+                'name' => 'Master'
             ]);
 
             return $next($request);
@@ -33,26 +32,24 @@ class TenantMiddleware
 
         $tenant = $this->getTenant($request->getHost());
 
-        if (! $tenant) {
-            abort(404);
-        } elseif (! $isDomainMain) {
-            $manager->setConnection($tenant);
+        if (! $tenant) { abort(404); }
 
-            $this->setSessionTenant($tenant->only([
-                'name', 'uuid',
-            ]));
-        }
+        $manager->setConnection($tenant);
+        $this->setSessionTenant([
+            'name' => $tenant->name
+        ]);
 
         return $next($request);
     }
 
-    public function getTenant($host)
+    public function getTenant(string $host) : Tenant
     {
         $host = explode('.', $host, 2);
-        return Tenant::where('domain', $host[0])->first();
+        
+        return Tenant::where('subdomain', $host[0])->first();
     }
 
-    public function setSessionTenant($tenant) : void
+    public function setSessionTenant(array $tenant) : void
     {
         session()->put('current_tenant', $tenant);
     }

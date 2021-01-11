@@ -24,7 +24,7 @@ class TenantController extends BaseController
     public function index()
     {
         $tenants = Tenant::orderBy('name')->get();
-        $domain = explode(".", config('multitenancy.domain_main'), 2);
+        $domain = explode(".", config('multitenancy.base_domain'), 2);
 
         return view('multitenancy::index', [
             'tenants' => $tenants,
@@ -34,7 +34,7 @@ class TenantController extends BaseController
 
     public function create()
     {
-        $domain = explode(".", config('multitenancy.domain_main'), 2);
+        $domain = explode(".", config('multitenancy.base_domain'), 2);
 
         return view('multitenancy::create', [
             'domain' => ".$domain[1]"
@@ -51,9 +51,7 @@ class TenantController extends BaseController
         $tenant = Tenant::create($data);
 
         if ($request->create_database) {
-            $createDatabase = event(new TenantCreate($tenant));
-
-            if (!$createDatabase) {
+            if (! event(new TenantCreate($tenant))) {
                 DB::rollBack();
             }
         }
@@ -63,7 +61,7 @@ class TenantController extends BaseController
         return redirect()->route('tenants.index');
     }
 
-    public function migration(Request $request)
+    public function migration()
     {
         Artisan::call('multitenancy:migrations');
 

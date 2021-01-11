@@ -62,14 +62,14 @@
                                                     <td class="px-6 py-4 whitespace-nowrap">
                                                         <div class="text-sm text-gray-900">{{ $tenant->name }}</div>
                                                         <div class="text-sm text-blue-500">
-                                                            <a href="//{{ $tenant->domain . $domain }}" target="_blank" title="Acessar {{ $tenant->name }}">{{ $tenant->domain . $domain }}</a>
+                                                            <a href="//{{ $tenant->subdomain . $domain }}" target="_blank" title="Acessar {{ $tenant->name }}">{{ $tenant->subdomain . $domain }}</a>
                                                         </div>
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
-                                                        <div class="text-sm text-gray-900">{{ $tenant->db_host }}</div>
+                                                        <div class="text-sm text-gray-900">{{ $tenant->database_host }}</div>
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
-                                                        <div class="text-sm text-gray-900">{{ $tenant->db_name }}</div>
+                                                        <div class="text-sm text-gray-900">{{ $tenant->database_name }}</div>
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
                                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-600 text-white">
