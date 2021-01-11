@@ -13,7 +13,7 @@ return [
     | path below. Otherwise, this will be used as the subdomain.
     |
     */
-    'domain_main' => 'master.tenancy.test',
+    'base_domain' => 'master.tenancy.test',
 
     'middleware_admin' => [
         'web',
@@ -25,6 +25,15 @@ return [
         'auth'
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Tenants Prefix
+    |--------------------------------------------------------------------------
+    |
+    | This is the tenant prefix where the system administrator
+    | can manage all tenants
+    |
+    */
     'prefix' => 'tenants'
 
 ];
