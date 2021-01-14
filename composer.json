@@ -20,6 +20,7 @@
         "illuminate/contracts": "^8.0"
     },
     "require-dev": {
+        "laravel/breeze": "^1.0",
         "orchestra/testbench": "^6.0",
         "phpunit/phpunit": "^9.3"
     },
@@ -37,6 +38,7 @@
     "scripts": {
         "psalm": "vendor/bin/psalm",
         "test": "vendor/bin/phpunit --colors=always",
+        "test-f": "vendor/bin/phpunit --filter",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
     },
     "config": {
