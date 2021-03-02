@@ -22,17 +22,16 @@
                                     </p>
                                     <p class="mt-3 text-sm text-gray-600">
                                         <strong>Hostname: </strong> Informe o endereço IP do servidor de banco de dados ou se preferir insira o domínio do mesmo.
-                                        Caso esteja executando o serviço em Docker, informe o nome do container criado.
                                     </p>
 
                                     <p class="mt-3 text-sm text-gray-600">
                                         <strong>Database: </strong> Informe o nome do banco de dados. O mesmo será criado caso não exista.
                                     </p>
                                     <p class="mt-3 text-sm text-gray-600">
-                                        <strong>Usuário: </strong> Informe o usuário do banco de dados, é necessário que o usuário tenha privilégio para criar banco de dados.
+                                        <strong>Usuário: </strong> Informe o usuário do banco de dados (esse usuário será criado se a opção de criar database estiver marcado).
                                     </p>
                                     <p class="mt-3 text-sm text-gray-600">
-                                        <strong>Senha: </strong> Informe a senha do usuário do banco de dados, caso não exista, deixe em branco.
+                                        <strong>Senha: </strong> Informe a senha do usuário do banco de dados. Deixe em branco para utilizar a senha informada no arquivo <strong>.env</strong>.
                                     </p>
                                 </div>
                             </div>

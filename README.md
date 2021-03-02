@@ -32,7 +32,26 @@ Instale o laravel.
 composer create-project laravel/laravel multitenancy
 ```
 
-O Laravel 8 contém um arquivo `docker-compose.yml` na raiz do projeto. Substitue o conteúdo do arquivo por esse:
+O Laravel 8 vem com o pacote Laravel Sail já instalado, sendo necessário apenas executar um comando para publicar o `docker-compose.yml` na raiz do projeto. Execute o seguinte comando para isso:
+
+```
+php artisan sail:install
+
+aristides ~/Projetos/multitenancy $ php artisan sail:install
+
+ Which services would you like to install? [mysql]:
+  [0] mysql
+  [1] pgsql
+  [2] redis
+  [3] selenium
+  [4] mailhog
+  [5] meilisearch
+> 0
+```
+
+Escolha o banco de Dados Mysql [0].
+
+Será gerado o arquivo `docker-compose.yml` na raiz do projeto, substitue o mesmo pelo conteúdo abaixo:
 
 ```yml
 # For more information: https://laravel.com/docs/sail
@@ -88,13 +107,13 @@ DB_HOST=mysql
 DB_PORT=3306
 DB_DATABASE=laravel
 DB_USERNAME=root
-DB_PASSWORD=
+DB_PASSWORD=root
 ```
 
 Execute o docker compose e aguarde a criação dos containers:
 
 ```
-docker-compose up -d
+./vendor/bin/sail up -d
 ```
 
 Acesse seu container da aplicação:
@@ -107,40 +126,36 @@ cd /var/www/html
 
 ## Instalando o pacote Multitenancy
 
-Você pode instalar o pacote via composer:
+Dentro do container app, instale o pacote Multitenancy via composer:
 
 ```bash
 composer require aristidesneto/multitenancy
 ```
 
-
 ### Configuração Tenant
 
-É necessário criar uma nova conexão que será utilizada pelos tenants. Para isso abra o arquivo `config/database.php` e duplique a conexão atual `mysql` e crie outra com o nome de `tenant`.
+É necessário criar uma nova conexão que será utilizada pelos tenants. Para isso abra o arquivo `config/database.php` e copie a conexão abaixo e cole logo apó a conexão atual `mysql`.
 
 ```php
-'connections' => [
-    'tenant' => [
-        'driver' => 'mysql',
-        'url' => env('DATABASE_URL'),
-        'host' => env('DB_HOST', '127.0.0.1'),
-        'port' => env('DB_PORT', '3306'),
-        'database' => env('DB_DATABASE', 'forge'),
-        'username' => env('DB_USERNAME', 'forge'),
-        'password' => env('DB_PASSWORD', ''),
-        'unix_socket' => env('DB_SOCKET', ''),
-        'charset' => 'utf8mb4',
-        'collation' => 'utf8mb4_unicode_ci',
-        'prefix' => '',
-        'prefix_indexes' => true,
-        'strict' => true,
-        'engine' => null,
-        'options' => extension_loaded('pdo_mysql') ? array_filter([
-            PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-        ]) : [],
-    ],
-]
-...
+  'tenant' => [
+      'driver' => 'mysql',
+      'url' => env('DATABASE_URL'),
+      'host' => env('DB_HOST', '127.0.0.1'),
+      'port' => env('DB_PORT', '3306'),
+      'database' => env('DB_DATABASE', 'forge'),
+      'username' => env('DB_USERNAME', 'forge'),
+      'password' => env('DB_PASSWORD', ''),
+      'unix_socket' => env('DB_SOCKET', ''),
+      'charset' => 'utf8mb4',
+      'collation' => 'utf8mb4_unicode_ci',
+      'prefix' => '',
+      'prefix_indexes' => true,
+      'strict' => true,
+      'engine' => null,
+      'options' => extension_loaded('pdo_mysql') ? array_filter([
+          PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+      ]) : [],
+  ],
 ```
 
 ### Comando Install
@@ -165,11 +180,43 @@ E-mail: admin@admin.com
 Senha: password
 ```
 
-Após o login, você pode gerenciar os tenants, cadastrando e se necessário o zerando banco do tenant enquanto estiver em desenvolvimento.
+### Configurações para antes de cadastrar um Tenant
 
-Tela de gerenciamento de tenants:
+Quando um Tenant é cadastrado, suas informações como dados de login ao banco de dados é armazenado na tabela `tenants` da aplicação, nesse exemplo no banco `laravel`.
+
+Por segurança, a senha dos usuários Tenants do banco Mysql pode ser salva no arquivo `.env` seguindo a nomeclatura:
+
+```
+CLIENT1_PASSWORD=password_client1
+CLIENT2_PASSWORD=password_client2
+```
+
+Onde o `CLIENT1` é o nome do banco de dados que será utilizado para o Tenant, em seguida use `_PASSWORD`.
+
+Caso essas informações não seja informada no `.env`, o sistema irá buscar na tabela `tenants` os dados de login e senha do banco referente ao Tenant.
+
+## Cadastrando Tenants
+
+Após o login, você poderá gerenciar os tenants. É possível cadastrar e se necessário zerar o banco de dados do tenant, opção essa que somente enquanto estiver em desenvolvimento.
+
+Tela de Gerenciamento de Tenants:
 
 ![Listagens de Tenants](./docs/imgs/listagens-tenants.png)
+
+Tela de Cadastro de Tenant:
+
+![Listagens de Tenants](./docs/imgs/cadastro-tenants.png)
+
+### Como cadastrar um Tenant
+
+Veja como você deverá cadastrar um Tenant:
+
+1. Subdomínio: Informe uma url válida de subdomínio, para ambiente de desenvolvimento crie entrada para o seu arquivo hosts.
+2. Nome do Tenant: Um nome de identificação do tenant, usado apenas para uso de gerenciamento.
+3. Hostname: Informe o endereço IP do servidor de banco de dados ou se preferir insira o domínio do mesmo. Caso esteja executando o serviço em Docker, informe o nome do container criado.
+4. Database: Informe o nome do banco de dados. O mesmo será criado caso não exista. 
+5. Usuário: Informe o usuário do banco de dados, esse usuário será criado se a opção de criar database estiver marcado.
+6. Senha: Por motivos de segurança, armazena a senha no arquivo `.env` como explicado mais acima. Caso queira salvar no banco de dados, basta informar a senha (será salva em texto puro).
 
 Após cadastrar um tenant, na listagem clique sobre a URL disponível. Irá abrir uma nova aba com a URL criada, utilize os dados abaixo para realizar login:
 
@@ -177,6 +224,7 @@ Após cadastrar um tenant, na listagem clique sobre a URL disponível. Irá abri
 E-mail: admin@tenant.com
 Senha: password
 ```
+
 
 ## Teste
 
